@@ -1,30 +1,30 @@
-const STORAGE_KEY = "digital-profile:profiles";
+import { supabase } from "./supabaseClient";
 
-export function loadProfiles() {
-  if (typeof localStorage === "undefined") return [];
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return [];
-  try {
-    return JSON.parse(raw);
-  } catch (error) {
-    console.warn("Could not parse profiles from storage", error);
+const TABLE = "profiles";
+
+export async function loadProfiles() {
+  const { data, error } = await supabase.from(TABLE).select("*");
+  if (error) {
+    console.error("Could not load profiles from Supabase", error);
     return [];
   }
+  return data || [];
 }
 
-export function saveProfile(profile) {
-  if (typeof localStorage === "undefined") return [];
-  const profiles = loadProfiles();
-  const existingIndex = profiles.findIndex((p) => p.slug === profile.slug);
-  if (existingIndex >= 0) {
-    profiles[existingIndex] = profile;
-  } else {
-    profiles.push(profile);
+export async function saveProfile(profile) {
+  const { data, error } = await supabase.from(TABLE).upsert(profile, { onConflict: "slug" }).select();
+  if (error) {
+    console.error("Could not save profile to Supabase", error);
+    throw error;
   }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(profiles));
-  return profiles;
+  return data?.[0] || profile;
 }
 
-export function getProfile(slug) {
-  return loadProfiles().find((profile) => profile.slug === slug);
+export async function getProfile(slug) {
+  const { data, error } = await supabase.from(TABLE).select("*").eq("slug", slug).maybeSingle();
+  if (error) {
+    console.error("Could not fetch profile from Supabase", error);
+    return null;
+  }
+  return data || null;
 }
