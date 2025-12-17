@@ -143,165 +143,218 @@ const profileUrl = `https://digital-card-delta-ten.vercel.app/${slug}`;
   return (
     <>
       {/* ================= FORM ================= */}
-      <div className="w-full">
-        <section className="rounded-3xl border border-slate-800/80 bg-slate-900/80 p-8 shadow-xl shadow-indigo-900/30 backdrop-blur">
-          <div className="mb-8">
-            <p className="text-xs uppercase tracking-[0.28em] text-indigo-200/70">Create</p>
-            <h2 className="text-3xl font-semibold text-slate-50">Public profile + QR</h2>
-            <p className="mt-2 max-w-xl text-sm text-slate-300/80">
-              Fill the fields, submit, and we will generate a public page and QR code.
-            </p>
+<div className="w-full">
+  <section className="rounded-2xl sm:rounded-3xl border border-slate-800/80 bg-slate-900/80 p-4 sm:p-6 lg:p-8 shadow-xl shadow-indigo-900/30 backdrop-blur">
+    
+    {/* HEADER */}
+    <div className="mb-6 sm:mb-8">
+      <p className="text-xs uppercase tracking-[0.28em] text-indigo-200/70">
+        Create
+      </p>
+      <h2 className="mt-1 text-2xl sm:text-3xl font-semibold text-slate-50">
+        Public profile + QR
+      </h2>
+      <p className="mt-2 max-w-xl text-sm text-slate-300/80">
+        Fill the fields, submit, and we will generate a public page and QR code.
+      </p>
+    </div>
+
+    {/* FORM */}
+    <form className="grid gap-6" onSubmit={handleSubmit}>
+      
+      {/* BASIC FIELDS */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        {fieldGrid.map((field) => (
+          <label key={field.name} className="flex flex-col gap-1.5">
+            <div className="flex items-center justify-between text-sm text-slate-200/90">
+              <span>{field.label}</span>
+              {field.required && (
+                <span className="text-xs text-indigo-200/80">Required</span>
+              )}
+            </div>
+
+            <input
+              className="w-full rounded-xl border border-slate-800/80 bg-slate-900/70 px-3 py-2.5 text-sm text-slate-100 shadow-inner outline-none focus:border-indigo-400/60 focus:ring-2 focus:ring-indigo-500/40"
+              name={field.name}
+              value={form[field.name]}
+              onChange={handleChange}
+              placeholder={field.placeholder}
+              required={field.required}
+              type={field.name === "email" ? "email" : "text"}
+            />
+          </label>
+        ))}
+      </div>
+
+      {/* SOCIAL LINKS */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        {socialFields.map((field) => (
+          <label key={field.name} className="flex flex-col gap-1.5">
+            <div className="flex items-center justify-between text-sm text-slate-200/90">
+              <span>{field.label}</span>
+              <span className="text-xs text-slate-400/70">Optional</span>
+            </div>
+
+            <input
+              className="w-full rounded-xl border border-slate-800/80 bg-slate-900/70 px-3 py-2.5 text-sm text-slate-100 shadow-inner outline-none focus:border-indigo-400/60 focus:ring-2 focus:ring-indigo-500/40"
+              name={field.name}
+              value={form[field.name]}
+              onChange={handleChange}
+              placeholder={field.placeholder}
+              type="text"
+            />
+          </label>
+        ))}
+      </div>
+
+      {/* BIO + LOCATION / SERVICES */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        
+        {/* BIO */}
+        <label className="flex flex-col gap-1.5">
+          <div className="flex items-center justify-between text-sm text-slate-200/90">
+            <span>Bio / summary</span>
+            <span className="text-xs text-slate-400/70">Optional</span>
           </div>
 
-          <form className="grid gap-6" onSubmit={handleSubmit}>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {fieldGrid.map((field) => (
-                <label key={field.name} className="flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between text-sm text-slate-200/90">
-                    <span>{field.label}</span>
-                    {field.required && (
-                      <span className="text-xs text-indigo-200/80">Required</span>
-                    )}
-                  </div>
-                  <input
-                    className="rounded-xl border border-slate-800/80 bg-slate-900/70 px-3 py-2.5 text-slate-100 shadow-inner outline-none focus:border-indigo-400/60 focus:ring-2 focus:ring-indigo-500/40"
-                    name={field.name}
-                    value={form[field.name]}
-                    onChange={handleChange}
-                    placeholder={field.placeholder}
-                    required={field.required}
-                    type={field.name === "email" ? "email" : "text"}
-                  />
-                </label>
-              ))}
+          <textarea
+            name="bio"
+            value={form.bio}
+            onChange={handleChange}
+            rows={4}
+            placeholder="Short blurb about what you do and who you help."
+            className="w-full resize-none rounded-xl border border-slate-800/80 bg-slate-900/70 px-3 py-3 text-sm text-slate-100 shadow-inner outline-none focus:border-indigo-400/60 focus:ring-2 focus:ring-indigo-500/40"
+          />
+        </label>
+
+        {/* LOCATION + SERVICES */}
+        <div className="grid gap-4">
+          <label className="flex flex-col gap-1.5">
+            <div className="flex items-center justify-between text-sm text-slate-200/90">
+              <span>Location</span>
+              <span className="text-xs text-slate-400/70">Optional</span>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              {socialFields.map((field) => (
-                <label key={field.name} className="flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between text-sm text-slate-200/90">
-                    <span>{field.label}</span>
-                    <span className="text-xs text-slate-400/70">Optional</span>
-                  </div>
-                  <input
-                    className="rounded-xl border border-slate-800/80 bg-slate-900/70 px-3 py-2.5 text-slate-100 shadow-inner outline-none focus:border-indigo-400/60 focus:ring-2 focus:ring-indigo-500/40"
-                    name={field.name}
-                    value={form[field.name]}
-                    onChange={handleChange}
-                    placeholder={field.placeholder}
-                    type="text"
-                  />
-                </label>
-              ))}
+            <input
+              name="location"
+              value={form.location}
+              onChange={handleChange}
+              placeholder="City, Country"
+              className="w-full rounded-xl border border-slate-800/80 bg-slate-900/70 px-3 py-2.5 text-sm text-slate-100 shadow-inner outline-none focus:border-indigo-400/60 focus:ring-2 focus:ring-indigo-500/40"
+              type="text"
+            />
+          </label>
+
+          <label className="flex flex-col gap-1.5">
+            <div className="flex items-center justify-between text-sm text-slate-200/90">
+              <span>Services / skills</span>
+              <span className="text-xs text-slate-400/70">Optional</span>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="flex flex-col gap-1.5">
-                <div className="flex items-center justify-between text-sm text-slate-200/90">
-                  <span>Bio / summary</span>
-                  <span className="text-xs text-slate-400/70">Optional</span>
-                </div>
-                <textarea
-                  name="bio"
-                  value={form.bio}
-                  onChange={handleChange}
-                  rows={4}
-                  placeholder="Short blurb about what you do and who you help."
-                  className="rounded-xl border border-slate-800/80 bg-slate-900/70 px-3 py-3 text-slate-100 shadow-inner outline-none focus:border-indigo-400/60 focus:ring-2 focus:ring-indigo-500/40"
-                />
-              </label>
-
-              <div className="grid gap-4">
-                <label className="flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between text-sm text-slate-200/90">
-                    <span>Location</span>
-                    <span className="text-xs text-slate-400/70">Optional</span>
-                  </div>
-                  <input
-                    name="location"
-                    value={form.location}
-                    onChange={handleChange}
-                    placeholder="City, Country"
-                    className="rounded-xl border border-slate-800/80 bg-slate-900/70 px-3 py-2.5 text-slate-100 shadow-inner outline-none focus:border-indigo-400/60 focus:ring-2 focus:ring-indigo-500/40"
-                    type="text"
-                  />
-                </label>
-
-                <label className="flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between text-sm text-slate-200/90">
-                    <span>Services / skills (comma separated)</span>
-                    <span className="text-xs text-slate-400/70">Optional</span>
-                  </div>
-                  <input
-                    name="services"
-                    value={form.services}
-                    onChange={handleChange}
-                    placeholder="Branding, Web design, Frontend dev"
-                    className="rounded-xl border border-slate-800/80 bg-slate-900/70 px-3 py-2.5 text-slate-100 shadow-inner outline-none focus:border-indigo-400/60 focus:ring-2 focus:ring-indigo-500/40"
-                    type="text"
-                  />
-                </label>
-              </div>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <label className="flex flex-col gap-2 rounded-2xl border border-slate-800/80 bg-slate-900/70 p-4 shadow-inner">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-semibold text-slate-100">Avatar / logo</p>
-                    <p className="text-xs text-slate-400/80">JPG or PNG, shown on the public profile.</p>
-                  </div>
-                  <Avatar
-                    url={form.avatarDataUrl}
-                    initials={`${form.firstName?.[0] || ""}${form.lastName?.[0] || ""}` || "DP"}
-                    size="12"
-                    theme={form.theme}
-                  />
-                </div>
-                <input type="file" accept="image/*" onChange={handleAvatarChange} className="text-xs text-slate-300" />
-              </label>
-
-              <label className="flex flex-col gap-2 rounded-2xl border border-slate-800/80 bg-slate-900/70 p-4 shadow-inner">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-semibold text-slate-100">Accent theme</p>
-                    <p className="text-xs text-slate-400/80">Applies to buttons, badges, and QR cards.</p>
-                  </div>
-                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${getPalette(form.theme).accentBadge}`}>
-                    Live
-                  </span>
-                </div>
-                <select
-                  name="theme"
-                  value={form.theme}
-                  onChange={handleChange}
-                  className={`rounded-xl border border-slate-800/80 bg-slate-900/70 px-3 py-2.5 text-sm text-slate-100 shadow-inner outline-none ${getPalette(form.theme).accentRing}`}
-                >
-                  {themeOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-
-            <button
-              type="submit"
-              disabled={status.state === "loading"}
-              className="mt-2 inline-flex items-center justify-center rounded-xl bg-indigo-500 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-indigo-400 disabled:bg-slate-600"
-            >
-              {status.state === "loading" ? "Creating..." : "Generate profile + QR"}
-            </button>
-
-            {status.message && (
-              <p className={`text-sm ${status.state === "error" ? "text-rose-200/90" : "text-emerald-200/90"}`}>
-                {status.message}
-              </p>
-            )}
-          </form>
-        </section>
+            <input
+              name="services"
+              value={form.services}
+              onChange={handleChange}
+              placeholder="Branding, Web design, Frontend dev"
+              className="w-full rounded-xl border border-slate-800/80 bg-slate-900/70 px-3 py-2.5 text-sm text-slate-100 shadow-inner outline-none focus:border-indigo-400/60 focus:ring-2 focus:ring-indigo-500/40"
+              type="text"
+            />
+          </label>
+        </div>
       </div>
+
+      {/* AVATAR + THEME */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        
+        {/* AVATAR */}
+        <label className="flex flex-col gap-3 rounded-2xl border border-slate-800/80 bg-slate-900/70 p-4 shadow-inner">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold text-slate-100">
+                Avatar / logo
+              </p>
+              <p className="text-xs text-slate-400/80">
+                JPG or PNG, shown on the public profile.
+              </p>
+            </div>
+
+            <Avatar
+              url={form.avatarDataUrl}
+              initials={`${form.firstName?.[0] || ""}${form.lastName?.[0] || ""}` || "DP"}
+              size="10"
+              theme={form.theme}
+            />
+          </div>
+
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleAvatarChange}
+            className="text-xs text-slate-300"
+          />
+        </label>
+
+        {/* THEME */}
+        <label className="flex flex-col gap-3 rounded-2xl border border-slate-800/80 bg-slate-900/70 p-4 shadow-inner">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-slate-100">
+                Accent theme
+              </p>
+              <p className="text-xs text-slate-400/80">
+                Applies to buttons, badges, and QR cards.
+              </p>
+            </div>
+
+            <span
+              className={`rounded-full px-3 py-1 text-xs font-semibold ${getPalette(form.theme).accentBadge}`}
+            >
+              Live
+            </span>
+          </div>
+
+          <select
+            name="theme"
+            value={form.theme}
+            onChange={handleChange}
+            className={`w-full rounded-xl border border-slate-800/80 bg-slate-900/70 px-3 py-2.5 text-sm text-slate-100 shadow-inner outline-none ${getPalette(form.theme).accentRing}`}
+          >
+            {themeOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      {/* SUBMIT */}
+      <button
+        type="submit"
+        disabled={status.state === "loading"}
+        className="mt-2 w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-indigo-500 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-indigo-400 disabled:bg-slate-600"
+      >
+        {status.state === "loading"
+          ? "Creating..."
+          : "Generate profile + QR"}
+      </button>
+
+      {/* STATUS MESSAGE */}
+      {status.message && (
+        <p
+          className={`text-sm ${
+            status.state === "error"
+              ? "text-rose-200/90"
+              : "text-emerald-200/90"
+          }`}
+        >
+          {status.message}
+        </p>
+      )}
+    </form>
+  </section>
+</div>
+
 
       {/* ================= PREVIEW MODAL ================= */}
       {showPreview && createdProfile && (
