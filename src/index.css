@@ -2,30 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Set default font on html/body (more reliable than :root) */
-html,
-body {
-  color: #0f172a;
-  background-color: #0b1220;
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  line-height: 1.6;
-  font-weight: 400;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Force a normal text font everywhere */
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html, body {
+    margin: 0;
+    min-height: 100%;
+    background: #0b1220;
+    color: #0f172a;
+
+    /* IMPORTANT: force text fonts only */
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif !important;
+
+    line-height: 1.6;
+    font-weight: 400;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Everything inherits the same font (prevents random icon fonts) */
+  * {
+    font-family: inherit !important;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
-/* Prevent any inherited weird font on all elements */
-* {
-  font-family: inherit;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
+/* If you use Material Symbols, keep it ONLY for icons */
+.material-symbols-outlined,
+.material-icons {
+  font-family: "Material Symbols Outlined", "Material Icons" !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  line-height: 1 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  display: inline-block !important;
+  white-space: nowrap !important;
+  direction: ltr !important;
+  -webkit-font-smoothing: antialiased !important;
 }
