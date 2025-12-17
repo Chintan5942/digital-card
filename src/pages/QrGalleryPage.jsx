@@ -14,15 +14,13 @@ export default function QrGalleryPage() {
   useEffect(() => {
     let active = true;
     (async () => {
-      setStatus({ state: "loading", message: "Loading profiles..." });
       try {
         const data = await loadProfiles();
         if (active) {
           setProfiles(data);
           setStatus({ state: "success", message: "" });
         }
-      } catch (error) {
-        console.error(error);
+      } catch {
         if (active)
           setStatus({ state: "error", message: "Could not load profiles." });
       }
@@ -40,99 +38,97 @@ export default function QrGalleryPage() {
   };
 
   return (
-    <section className=" rounded-3xl  border border-slate-800/80 bg-slate-900/80 p-8 shadow-xl shadow-indigo-900/30 backdrop-blur">
+    <section className="rounded-2xl sm:rounded-3xl border border-slate-800/80 bg-slate-900/80 p-4 sm:p-6 lg:p-8 shadow-xl backdrop-blur">
       {/* HEADER */}
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.28em] text-indigo-200/70">
             QR Gallery
           </p>
-          <h2 className="text-3xl font-semibold text-slate-50">
+          <h2 className="text-xl sm:text-3xl font-semibold text-slate-50">
             All generated QR codes
           </h2>
           <p className="mt-1 text-sm text-slate-300/80">
-            Live view of every QR stored in Supabase.
+            Live view of every QR stored.
           </p>
         </div>
 
         <Link
           to="/"
-          className="rounded-full border border-indigo-500/60 bg-indigo-500/10 px-4 py-2 text-xs font-semibold text-indigo-100 transition hover:bg-indigo-500/20"
+          className="w-full sm:w-auto text-center rounded-full border border-indigo-500/60 bg-indigo-500/10 px-4 py-2 text-xs font-semibold text-indigo-100 hover:bg-indigo-500/20"
         >
           Create another
         </Link>
       </div>
 
-      {/* EMPTY / LOADING STATE */}
+      {/* STATES */}
       {profiles.length === 0 ? (
         <p className="text-sm text-slate-300/80">
           {status.state === "loading"
-            ? "Loading profiles from Supabase..."
-            : "No QR codes yet. Create a profile first."}
+            ? "Loading profiles..."
+            : "No QR codes yet."}
         </p>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {profiles.map((profile) => {
             const palette = getPalette(profile.theme);
 
             return (
               <article
                 key={profile.slug}
-                className="group rounded-2xl border border-slate-800/80 bg-slate-900/70 p-5 shadow-inner shadow-slate-950/40 transition hover:-translate-y-1 hover:border-indigo-400/60 hover:shadow-indigo-900/40"
+                className="flex flex-col rounded-2xl border border-slate-800/80 bg-slate-900/70 p-4 sm:p-5 transition hover:border-indigo-400/60"
               >
-                {/* CARD HEADER */}
+                {/* HEADER */}
                 <div className="flex flex-col items-center text-center">
                   <Avatar
                     url={profile.avatarDataUrl}
-                    initials={`${profile.firstName[0]}${
-                      profile.lastName ? profile.lastName[0] : ""
-                    }`}
-                    size="10"
+                    initials={`${profile.firstName[0]}${profile.lastName?.[0] || ""}`}
+                    size="9"
                     theme={profile.theme}
                   />
 
-                  <p className="mt-3 text-sm font-semibold text-slate-100">
+                  <p className="mt-2 text-sm font-semibold text-slate-100 break-words">
                     {profile.firstName} {profile.lastName}
                   </p>
-                  <p className="text-xs text-slate-400/80">
+                  <p className="text-xs text-slate-400/80 break-words">
                     {profile.businessName}
                   </p>
 
                   <span
-                    className={`mt-2 inline-block rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-wide ${palette.accentBadge}`}
+                    className={`mt-2 rounded-full px-3 py-1 text-[10px] font-semibold ${palette.accentBadge}`}
                   >
                     QR Code
                   </span>
                 </div>
 
-                {/* QR IMAGE */}
+                {/* QR */}
                 <div className="mt-4 flex justify-center">
                   <img
                     src={profile.qrDataUrl}
                     alt={`QR for ${profile.firstName}`}
-                    className={`w-44 rounded-2xl border bg-white p-4 shadow-lg ${palette.accentBorder}`}
+                    className={`w-36 sm:w-44 rounded-xl bg-white p-3 ${palette.accentBorder}`}
                   />
                 </div>
 
-                {/* CARD FOOTER */}
-                <div className="mt-5 flex items-center justify-between text-xs text-slate-300/80">
+                {/* FOOTER */}
+                <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <Link
                     to={`/${profile.slug}`}
-                    className="rounded-full border border-slate-700/70 px-3 py-1 font-semibold text-slate-100 transition hover:border-indigo-400/60 hover:text-indigo-100"
+                    className="w-full sm:w-auto text-center rounded-full border border-slate-700/70 px-3 py-1.5 text-xs font-semibold text-slate-100 hover:border-indigo-400/60"
                   >
                     View profile
                   </Link>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col sm:flex-row items-center gap-2">
                     <button
                       type="button"
                       onClick={() => downloadQr(profile)}
-                      className={`rounded-full px-3 py-1 font-semibold transition ${palette.accentBadge}`}
+                      className={`w-full sm:w-auto rounded-full px-3 py-1.5 text-xs font-semibold ${palette.accentBadge}`}
                     >
                       Download
                     </button>
 
-                    <span className="max-w-[80px] truncate text-[11px] text-slate-400/70">
+                    <span className="max-w-full truncate text-[11px] text-slate-400/70">
                       /{profile.slug}
                     </span>
                   </div>

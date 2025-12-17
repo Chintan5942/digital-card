@@ -305,54 +305,79 @@ const profileUrl = `https://digital-card-delta-ten.vercel.app/${slug}`;
 
       {/* ================= PREVIEW MODAL ================= */}
       {showPreview && createdProfile && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur">
-          <div className="w-full max-w-lg rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-2xl">
-            <div className="mb-4 flex items-start justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-[0.28em] text-indigo-200/70">Profile Preview</p>
-                <h3 className="text-xl font-semibold text-slate-50">
-                  {createdProfile.firstName} {createdProfile.lastName}
-                </h3>
-                <p className="text-sm text-slate-300/80">{createdProfile.businessName}</p>
-              </div>
-              <button onClick={() => setShowPreview(false)} className="text-slate-400 hover:text-slate-200">
-                ✕
-              </button>
-            </div>
-
-            <div className="flex flex-col items-center gap-4">
-              <Avatar
-                url={createdProfile.avatarDataUrl}
-                initials={`${createdProfile.firstName[0]}${createdProfile.lastName?.[0] || ""}`}
-                size="14"
-                theme={createdProfile.theme}
-              />
-
-              <img
-                src={createdProfile.qrDataUrl}
-                alt="QR code"
-                className={`w-48 rounded-xl border bg-white p-3 ${palette.accentBorder}`}
-              />
-
-              <a
-                href={createdProfile.profileUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="text-sm text-indigo-200 underline"
-              >
-                {createdProfile.profileUrl}
-              </a>
-
-              <Link
-                to={`/${createdProfile.slug}`}
-                className={`rounded-full px-4 py-2 text-sm font-semibold ${palette.accentButton}`}
-              >
-                Open profile
-              </Link>
-            </div>
-          </div>
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 px-6 pt-20">
+    <div className="w-full max-w-md max-h-[85vh] overflow-y-auto rounded-2xl bg-slate-900 p-4 sm:p-6">
+      
+      {/* HEADER */}
+      <div className="mb-4 flex items-start justify-between">
+        <div>
+          <p className="text-xs uppercase tracking-[0.28em] text-indigo-200/70">
+            Profile Preview
+          </p>
+          <h3 className="text-lg font-semibold text-slate-50">
+            {createdProfile.firstName} {createdProfile.lastName}
+          </h3>
+          <p className="text-sm text-slate-300/80">
+            {createdProfile.businessName}
+          </p>
         </div>
-      )}
+        <button
+          onClick={() => setShowPreview(false)}
+          className="text-slate-400 hover:text-slate-200"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* CONTENT */}
+      <div className="flex flex-col items-center gap-4">
+        <Avatar
+          url={createdProfile.avatarDataUrl}
+          initials={`${createdProfile.firstName[0]}${createdProfile.lastName?.[0] || ""}`}
+          size="14"
+          theme={createdProfile.theme}
+        />
+
+        <img
+          src={createdProfile.qrDataUrl}
+          alt="QR code"
+          className={`w-40 sm:w-48 rounded-xl border bg-white p-3 ${palette.accentBorder}`}
+        />
+
+        {/* PROFILE URL */}
+        <a
+          href={createdProfile.profileUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="break-all text-center text-sm text-indigo-200 underline"
+        >
+          {createdProfile.profileUrl}
+        </a>
+
+        {/* ACTION BUTTONS */}
+        <div className="flex flex-col sm:flex-row gap-3 w-full justify-center">
+          {/* DOWNLOAD QR */}
+          <a
+            href={createdProfile.qrDataUrl}
+            download={`${createdProfile.slug}-qr.png`}
+            className={`w-full sm:w-auto rounded-full px-4 py-2 text-center text-sm font-semibold ${palette.accentButton}`}
+          >
+            Download QR
+          </a>
+
+          {/* OPEN PROFILE */}
+          <Link
+            to={`/${createdProfile.slug}`}
+            className={`w-full sm:w-auto rounded-full px-4 py-2 text-center text-sm font-semibold ${palette.accentButton}`}
+          >
+            Open profile
+          </Link>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
     </>
   );
 }
